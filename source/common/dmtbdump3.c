@@ -694,6 +694,8 @@ AcpiDmDumpTpm2 (
     ACPI_TABLE_TPM2         *CommonHeader = ACPI_CAST_PTR (ACPI_TABLE_TPM2, Table);
     ACPI_TPM2_TRAILER       *Subtable = ACPI_ADD_PTR (ACPI_TPM2_TRAILER, Table, Offset);
     ACPI_TPM2_ARM_SMC       *ArmSubtable;
+    ACPI_TPM2_AMD_MAILBOX   *AmdSubtable;
+    ACPI_TPM2_ARM_FFA       *ArmFfaSubtable;
     ACPI_STATUS             Status;
 
 
@@ -712,28 +714,54 @@ AcpiDmDumpTpm2 (
         return;
     }
 
-    AcpiOsPrintf ("\n");
-    Status = AcpiDmDumpTable (Table->Length, Offset, Subtable,
-        Table->Length - Offset, AcpiDmTableInfoTpm2a);
-    if (ACPI_FAILURE (Status))
-    {
-        return;
-    }
-
     switch (CommonHeader->StartMethod)
     {
     case ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC:
 
         ArmSubtable = ACPI_ADD_PTR (ACPI_TPM2_ARM_SMC, Subtable,
             sizeof (ACPI_TPM2_TRAILER));
-        Offset += sizeof (ACPI_TPM2_TRAILER);
+        Offset += sizeof (ACPI_TPM2_TRAILER_REV4);
 
         AcpiOsPrintf ("\n");
         (void) AcpiDmDumpTable (Table->Length, Offset, ArmSubtable,
             Table->Length - Offset, AcpiDmTableInfoTpm211);
         break;
+    case ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON:
+
+        AmdnSubtable = ACPI_ADD_PTR (ACPI_TPM2_AMD_MAILBOX, Subtable,
+            sizeof (ACPI_TPM2_TRAILER_REV4 + 4));
+        Offset += sizeof (ACPI_TPM2_TRAILER_REV4) + 4;
+
+        AcpiOsPrintf ("\n");
+        (void) AcpiDmDumpTable (Table->Length, Offset, AmdSubtable,
+            Table->Length - Offset, AcpiDmTableInfoTpm213);
+        break;
+    case ACPI_TPM2_CRB_WITH_ARM_FFA:
+
+        ArmFfaSubtable = ACPI_ADD_PTR (ACPI_TPM2_AMD_MAILBOX, Subtable,
+            sizeof (ACPI_TPM2_TRAILER_REV4));
+        Offset += sizeof (ACPI_TPM2_TRAILER_REV4);
+
+        AcpiOsPrintf ("\n");
+        (void) AcpiDmDumpTable (Table->Length, Offset, ArmFfaSubtable,
+            Table->Length - Offset, AcpiDmTableInfoTpm215);
+        break;
 
     default:
+        AcpiOsPrintf ("\n");
+        if (Table->Revision == 4)
+        {
+            Status = AcpiDmDumpTable (Table->Length, Offset, Subtable,
+                Table->Length - Offset, AcpiDmTableInfoTpm2a);
+        } else if if (Table->Revision == 5)
+        {
+            Status = AcpiDmDumpTable (Table->Length, Offset, Subtable,
+                Table->Length - Offset, AcpiDmTableInfoTpm2a5);
+        }
+        if (ACPI_FAILURE (Status))
+        {
+            return;
+        }
         break;
     }
 }

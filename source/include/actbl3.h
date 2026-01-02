@@ -662,14 +662,22 @@ typedef struct acpi_table_tpm2
 
 /* Optional trailer appears after any StartMethod subtables */
 
-typedef struct acpi_tpm2_trailer
+typedef struct acpi_tpm2_trailer_rev4
 {
     UINT8                   MethodParameters[12];
     UINT32                  MinimumLogLength;   /* Minimum length for the event log area */
     UINT64                  LogAddress;         /* Address of the event log area */
 
-} ACPI_TPM2_TRAILER;
+} ACPI_TPM2_TRAILER_REV4;
 
+
+typedef struct acpi_tpm2_trailer_rev5
+{
+    UINT8                   MethodParameters[16];
+    UINT32                  MinimumLogLength;   /* Minimum length for the event log area */
+    UINT64                  LogAddress;         /* Address of the event log area */
+
+} ACPI_TPM2_TRAILER_REV5_11;
 
 /*
  * Subtables (StartMethod-specific)
@@ -686,6 +694,26 @@ typedef struct acpi_tpm2_arm_smc
     UINT32                  FunctionId;
 
 } ACPI_TPM2_ARM_SMC;
+
+/* 13: Start Method for AMD Pluton Mailbox */
+
+typedef struct acpi_tpm2_amd_mailbox
+{
+    UINT64                  TpmStartAddress;
+    UINT64                  TpmReplyAddress;
+
+} ACPI_TPM2_AMD_MAILBOX;
+
+/* 15: Start Method for ARM FFA */
+
+typedef struct acpi_tpm2_arm_ffa
+{
+    UINT8                   Flags;
+    UINT8                   Attributes;
+    UINT16                  PartitionId;
+    UINT64                  Reserved;
+
+} ACPI_TPM2_ARM_FFA;
 
 /* Values for InterruptFlags above */
 

@@ -609,6 +609,14 @@ ACPI_DMTABLE_INFO           AcpiDmTableInfoTpm2a[] =
     ACPI_DMT_TERMINATOR
 };
 
+ACPI_DMTABLE_INFO           AcpiDmTableInfoTpm2a5[] =
+{
+    {ACPI_DMT_BUF16,    ACPI_TPM2A_OFFSET (MethodParameters),       "Method Parameters", DT_OPTIONAL},
+    {ACPI_DMT_UINT32,   ACPI_TPM2A_OFFSET (MinimumLogLength),       "Minimum Log Length", DT_OPTIONAL},
+    {ACPI_DMT_UINT64,   ACPI_TPM2A_OFFSET (LogAddress),             "Log Address", DT_OPTIONAL},
+    ACPI_DMT_TERMINATOR
+};
+
 /* 11: Start Method for ARM SMC */
 
 ACPI_DMTABLE_INFO           AcpiDmTableInfoTpm211[] =
@@ -618,6 +626,32 @@ ACPI_DMTABLE_INFO           AcpiDmTableInfoTpm211[] =
     {ACPI_DMT_UINT8,    ACPI_TPM211_OFFSET (OperationFlags),        "Operation Flags", 0},
     {ACPI_DMT_UINT16,   ACPI_TPM211_OFFSET (Reserved),              "Reserved", 0},
     {ACPI_DMT_UINT32,   ACPI_TPM211_OFFSET (FunctionId),            "Function ID", 0},
+    {ACPI_DMT_UINT32,   ACPI_TPM211_OFFSET (MinimumLogLength),      "Minimum Log Length", DT_OPTIONAL},
+    {ACPI_DMT_UINT64,   ACPI_TPM211_OFFSET (LogAddress),            "Log Address", DT_OPTIONAL},
+    ACPI_DMT_TERMINATOR
+};
+
+/* 13: Start Method for AMD Pluton Mailbox */
+
+ACPI_DMTABLE_INFO           AcpiDmTableInfoTpm213[] =
+{
+    {ACPI_DMT_UINT64,   ACPI_TPM213_OFFSET (TpmStartAddress),       "TPM Start Address", 0},
+    {ACPI_DMT_UINT64,   ACPI_TPM213_OFFSET (TpmReplyAddress),       "TPM Reply Address", 0},
+    {ACPI_DMT_UINT32,   ACPI_TPM213_OFFSET (MinimumLogLength),      "Minimum Log Length", DT_OPTIONAL},
+    {ACPI_DMT_UINT64,   ACPI_TPM213_OFFSET (LogAddress),            "Log Address", DT_OPTIONAL},
+    ACPI_DMT_TERMINATOR
+};
+
+/* 15: Start Method for ARM FFA */
+
+ACPI_DMTABLE_INFO           AcpiDmTableInfoTpm215[] =
+{
+    {ACPI_DMT_UINT8,    ACPI_TPM215_OFFSET (Flags),                 "Flags", 0},
+    {ACPI_DMT_UINT8,    ACPI_TPM215_OFFSET (Attributes),            "Attributes", 0},
+    {ACPI_DMT_UINT16,   ACPI_TPM215_OFFSET (PartitionId),           "Partition ID", 0},
+    {ACPI_DMT_UINT64,   ACPI_TPM215_OFFSET (Reserved),              "Reserved", 0},
+    {ACPI_DMT_UINT32,   ACPI_TPM215_OFFSET (MinimumLogLength),      "Minimum Log Length", DT_OPTIONAL},
+    {ACPI_DMT_UINT64,   ACPI_TPM215_OFFSET (LogAddress),            "Log Address", DT_OPTIONAL},
     ACPI_DMT_TERMINATOR
 };
 
